@@ -1,0 +1,186 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  @media (max-width: 810px) and (max-height: 1080px) {
+    .mb-4.mb-lg-0 {
+      max-height: none; /* Reset max-height */
+      overflow-y: auto; /* Add scroll */
+    }
+  }
+  .custom-scroll-container {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin; /* Ancho del scrollbar */
+    scrollbar-color: #888888 #f0f0f0; /* Color del scrollbar */
+  }
+
+  .custom-scroll-container::-webkit-scrollbar {
+    width: 8px; /* Ancho del scrollbar en navegadores WebKit (Safari y Chrome) */
+  }
+
+  .custom-scroll-container::-webkit-scrollbar-thumb {
+    background-color: #888888; /* Color del thumb (barra móvil del scrollbar) */
+    border-radius: 4px;
+  }
+
+  .custom-scroll-container::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* Color del track (fondo del scrollbar) */
+  }
+
+  .max-w-100 {
+    max-width: 100%;
+  }
+
+  .max-h-100 {
+    max-height: 100%;
+  }
+</style>
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-8 mb-4 mb-lg-0">
+        <div class="product-slider" id="galleryTop">
+          <div class="swiper-container theme-slider position-lg-absolute all-0">
+            <div class="swiper-wrapper h-100">
+              <div class="swiper-slide h-100 d-flex align-items-center justify-content-center">
+                <img class="rounded-1 max-w-100 max-h-100" style="object-fit: contain;" src="{{data.logo_company}}" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <h5>{{data.offer_title}}</h5>
+        <a class="fs--10 mb-2 d-block" href="#!">{{data.area}}</a>
+        <div class="fs--2 mb-3 d-inline-block text-decoration-none">
+        </div>
+        <h4 class="d-flex align-items-center">
+          <span class="text-warning me-2">${{data.salary}}</span>
+        </h4>
+        <br><br><br>
+        <p class="fs--10 mb-1"> <span>Ciudad: </span><strong>{{data.municipalities}}</strong></p>
+        <p class="fs--10">Vacantes: {{data.number_vacancies}}</p>
+        <div class="row">
+          <div class="col-auto px-2 px-md-3">
+            <a class="btn btn-sm btn-primary" href="javascript:void(0);">
+              <span class="far fa-paper-plane me-sm-2"></span>
+                {% if applicat == 1 and request.session.type_user == 1 %}
+                  <span class="d-none d-sm-inline-block delete_apliction">
+                    Dejar de aplicar
+                  </span>
+                {% elif applicat == 0 and request.session.type_user == 1  %}
+                  <span class="d-none d-sm-inline-block select_aplication">
+                    Aplicar a la vacante
+                  </span>
+                {% elif request.session.type_user == 2 %}
+                  <span class="d-none d-sm-inline-block edit_aplication">
+                    Editar Publicación
+                  </span>
+                {% endif %}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="overflow-hidden mt-4">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active ps-0" id="description-tab" data-bs-toggle="tab" href="#tab-description" role="tab" aria-controls="tab-description" aria-selected="true">Descripción</a></li>
+            <li class="nav-item"><a class="nav-link px-2 px-md-3" id="reviews-tab" data-bs-toggle="tab" href="#tab-reviews" role="tab" aria-controls="tab-reviews" aria-selected="false">Comentarios</a></li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="tab-description" role="tabpanel" aria-labelledby="description-tab">
+              <div class="mt-3">
+                <p>{{data.description}}</p>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="tab-reviews" role="tabpanel" aria-labelledby="reviews-tab">
+              <div class="row mt-3">
+                <div class="{% if request.session.pk_user %}col-lg-6{% else %}col-lg-12{% endif %} mb-4 mb-lg-0 custom-scroll-container" style="max-height: 400px; overflow-y: auto;">
+                  <div class="mb-1"><span>Awesome support, great code 😍</span></div>
+                  <p class="fs--1 mb-2 text-600">By Drik Smith • October 14, 2019</p>
+                  <p class="mb-0">
+                    You shouldn't need to read a review to see how nice and polished this theme is. So I'll tell you something you won't find in the demo. After the download I had a technical question, emailed the team and got a response right from the team CEO with helpful advice.
+                  </p>
+                  <hr class="my-4" />
+                </div>
+                {% if request.session.pk_user %}
+                  <div class="col-lg-6 ps-lg-5">
+                    <form>
+                      <h5 class="mb-3">Escribe tu comentario</h5>
+                      <div class="mb-3">
+                        <label class="form-label" for="formGrouptextareaInput">Mensaje:</label>
+                        <textarea class="form-control" id="formGrouptextareaInput" rows="8"></textarea>
+                      </div>
+                      <button class="btn btn-primary" type="submit">Enviar</button>
+                    </form>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+  $(document).ready(function(){
+    console.clear()
+    $(document).on('click','.select_aplication',function(){
+      if("{{request.session.pk_user}}"){
+        $.ajax({
+          success:function(e){
+            $(".select_aplication").text("Dejar de aplicar")
+            $(".select_aplication").addClass('delete_apliction')
+            $(".select_aplication").removeClass('select_aplication')
+          }
+        })  
+      }else{
+        location.href = "{% url 'Login' %}"
+      }
+    })
+
+    $(".edit_aplication").click(function(){
+      location.href = "{% url 'Edit_Publication' data.pk_publication %}"
+    })
+
+
+    $(document).on('click','.delete_apliction',function(){
+      $.ajax({
+        url:"{% url 'Delete_Aplication' %}",
+        data:{'pk_publication':parseInt('{{data.pk_publication}}')},
+        success: function(e){
+          if(e == 'True'){
+            $(".delete_apliction").text("Aplicar a la vacante")
+            $(".delete_apliction").addClass('select_aplication')
+            $(".delete_apliction").removeClass('delete_apliction')
+          }
+        }
+      })
+    })
+    
+  })
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

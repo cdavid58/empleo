@@ -1,0 +1,116 @@
+{% extends '../base.html' %}
+{% block content %}
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row flex-between-center">
+      <div class="col-sm-auto mb-2 mb-sm-0">
+        <h6 class="mb-0">Mostrando 1-24 de 205 Empleos</h6>
+      </div>
+      <div class="col-sm-auto">
+        <div class="row gx-2 align-items-center">
+          <div class="col-auto">
+            <form class="row gx-2">
+              <div class="col-auto"><small>Ordenar por: </small></div>
+              <div class="col-auto">
+                <select id="sort-select" class="form-select form-select-sm" aria-label="Bulk actions">
+                   <option value="best-match" selected>Best Match</option>
+                   <option value="newest">Newest</option>
+                   <option value="price">Price</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<input type="text" id="searchInput" placeholder="Buscar..." class="form-control form-control-sm mb-2">
+{% for i in page_obj %}
+  <div class="card" data-date="{{ i.registration_date }}">
+    <div class="card-body p-0 overflow-hidden">
+      <div class="row g-0">
+          <div class="col-12 p-card">
+            <div class="row">
+              <div class="col-sm-5 col-md-4">
+                <div class="position-relative h-sm-100"><a class="d-block h-100" href="../../../app/e-commerce/product/product-details.html">
+                  <img class="img-fluid fit-cover rounded-1 absolute-sm-centered" src="{{i.logo_company}}" alt="" /></a>
+                </div>
+              </div>
+              <div class="col-sm-7 col-md-8">
+                <div class="row">
+                  <div class="col-lg-8">
+                    <h5 class="mt-3 mt-sm-0"><a class="text-dark fs-0 fs-lg-1" href="../../../app/e-commerce/product/product-details.html">{{i.title}}</a></h5>
+                    <p class="fs--1 mb-2 mb-md-3"><a class="text-900" href="javascript:void(0);">{{i.area}}</a></p>
+                    <p class="fs--1 mb-2 mb-md-3"><a class="text-900" href="javascript:void(0);">{{i.description}}</a></p>
+                  </div>
+                  <div class="col-lg-4 d-flex justify-content-between flex-column">
+                    <div>
+                      <h4 class="fs-1 fs-md-1 text-warning mb-0">{{i.name_company}}</h4>
+                      <p class="fs--1 mb-1">Vacantes: <strong>{{i.number_vacancies}}</strong></p>
+                      <div class="d-none d-lg-block">
+                        <p class="fs--1 mb-1">Salario: ${{i.salary}}</p>
+                        <p class="fs--1 mb-1">{{i.place}}</p>
+                        <p class="fs--1 mb-1">{{i.registration_date}}</strong>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="mt-2"><a class="btn btn-sm btn-outline-secondary border-300 d-lg-block me-2 me-lg-0" href="#!"><span class="far fa-heart"></span><span class="ms-2 d-none d-md-inline-block">Favorito</span></a><a class="btn btn-sm btn-primary d-lg-block mt-lg-2" href="{% url 'View_Publication' i.pk_application %}"><span class="far fa-eye"> </span><span class="ms-2 d-none d-md-inline-block">Ver Oferta</span></a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div><br>
+{% endfor %}
+  
+<!-- Your existing template content -->
+
+{% if page_obj.has_other_pages %}
+<div class="card-footer border-top d-flex justify-content-center">
+    {% if page_obj.has_previous %}
+      <a class="btn btn-falcon-default btn-sm me-2" href="?page=1" data-bs-toggle="tooltip" data-bs-placement="top" title="First">
+          <span class="fas fa-chevron-left"></span>
+      </a>
+      <!-- <a class="btn btn-sm btn-falcon-default text-primary me-2" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a> -->
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <a class="btn btn-sm btn-falcon-default me-2 active">{{ num }}</a>
+      {% else %}
+        <a class="btn btn-sm btn-falcon-default me-2" href="?page={{ num }}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <!-- <a class="btn btn-sm btn-falcon-default me-2" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a> -->
+    <a class="btn btn-falcon-default btn-sm" href="?page={{ page_obj.paginator.num_pages }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Last">
+        <span class="fas fa-chevron-right"></span>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block script %}
+  <script>
+    $(document).ready(function () {
+      $('#searchInput').on('input', function () {
+        const searchTerm = $(this).val().toLowerCase();
+        $('.card').each(function () {
+          const cardTitle = $(this).find('.fs-0.fs-lg-1').text().toLowerCase();
+          const cardArea = $(this).find('.text-900').text().toLowerCase();
+          if (cardTitle.includes(searchTerm) || cardArea.includes(searchTerm)) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      });
+  });
+  </script>
+{% endblock %}

@@ -1,0 +1,412 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="card mb-3">
+	<div class="card-body">
+	  <div class="row" style="padding: 10px !important;">
+			<form class="dropzone dropzone-multiple p-0" id="my-awesome-dropzone" enctype="multipart/form-data" action="" data-dropzone="data-dropzone" method="post">{% csrf_token %}
+				<div class="row">
+					<div class="mb-3 col-sm-6">
+					  <label class="form-label" for="exampleFormControlInput1">Titulo de la publicacion</label>
+					  <input class="form-control" id="exampleFormControlInput1" name="offer_title" type="text" value="{{data.offer_title}}" placeholder="Titulo" />
+					</div>
+					<div class="mb-3 col-sm-6">
+					  <label class="form-label" for="exampleFormControlInput1">Area</label>
+					  <select class="form-select js-choice Categoria" id="organizerSingle" size="1" name="area" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">{{data.area}}</option>
+							{% for i in area %}
+								{% if i.name != data.area %}
+									<option value="{{i.pk}}">{{i.name}}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+					<div class="mb-3 col-sm-12">
+					  <label class="form-label" for="exampleFormControlInput1">Descripción de tareas</label>
+					  <textarea class="form-control" id="intro" cols="30" style="resize: none;" name="description" rows="4">{{data.description}}</textarea>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="mb-3 col-sm-4">
+					  <label class="form-label" for="exampleFormControlInput1">Tipo de contrato</label>
+					  <select class="form-select js-choice Categoria" id="organizerSingle" size="1" name="type_contract" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">{{data.type_contract}}</option>
+							{% for i in Type_Contract %}
+								{% if data.type_contract != i.name %}
+									<option value="{{i.pk}}">{{i.name}}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+					<div class="mb-3 col-sm-3">
+					  <label class="form-label" for="exampleFormControlInput1">Jornada laboral</label>
+					  <select class="form-select js-choice Categoria" id="organizerSingle" size="1" name="workday" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">{{data.workday}}</option>
+							{% for i in Workday %}
+								{% if data.workday != i.name %}
+								<option value="{{i.pk}}">{{i.name}}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+					<div class="mb-3 col-sm-5">
+					  <label class="form-label" for="exampleFormControlInput1">Ciudad</label>
+					  <select class="form-select js-choice Categoria" id="organizerSingle" size="1" name="municipalities" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">{{data.municipalities}}</option>
+							{% for i in city %}
+								{% if data.municipalities != i.name %}
+									<option value="{{i.pk}}">{{i.name}}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="mb-3 col-sm-2">
+					  <label class="form-label" for="exampleFormControlInput1">Salario</label>
+					  <input class="form-control text-right" id="exampleFormControlInput1" name="salary" value="{{data.salary}}" type="number" placeholder="0" />
+					</div>
+					<div class="mb-3 col-sm-3">
+					  <label class="form-label" for="exampleFormControlInput1">Fecha de contratación</label>
+					  <input class="form-control" id="asd" name="date_hire" value="{{data.date_hire}}" type="date"/>
+					</div>
+					<div class="mb-3 col-sm-3">
+					  <label class="form-label" for="exampleFormControlInput1">Lugar de trabajo</label>
+					  <select class="form-select js-choice Categoria" id="organizerSingle" size="1" name="workplace" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">{{data.workplace}}</option>
+							{% for i in Workplace %}
+								{% if i.name != data.workplace %}
+									<option value="{{i.pk}}">{{i.name}}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+					<div class="mb-3 col-sm-1">
+					  <label class="form-label" for="exampleFormControlInput1">Vacantes</label>
+					  <input class="form-control text-right" id="exampleFormControlInput1" name="number_vacancies" type="number" value="{{data.number_vacancies}}" />
+					</div>
+					<div class="mb-3 col-sm-3">
+						<label class="form-label" for="exampleFormControlInput1">Años de Experiencia</label>
+						<select class="form-select js-choice years_experience" id="years_experience" size="1" name="years_experience" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">{{data.years_experience|floatformat:0|add:"0"}} años</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="mb-3 col-sm-4">
+					  <label class="form-label" for="exampleFormControlInput1">Edad mínima</label>
+					  <select class="form-select js-choice age_start" id="age_start" size="1" name="age_start" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option selected="selected" value="0">{{data.age_start}}</option>
+						</select>
+					</div>
+					<div class="mb-3 col-sm-3">
+					  <label class="form-label" for="exampleFormControlInput1">Edad máxima</label>
+					  <select class="form-select js-choice age_end" id="age_end" size="1" name="age_end" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option selected="selected" value="0">{{data.age_end}}</option>
+						</select>
+					</div>
+					<div class="mb-3 col-sm-5">
+					  <label class="form-label" for="exampleFormControlInput1">Estudios mínimos</label>
+					  <select class="form-select js-choice Categoria" id="organizerSingle" size="1" name="minimum_studies" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">Seleccione...</option>
+							{% for i in Minimum_Studiess %}
+								<option value="{{i.pk}}">{{i.name}}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="mb-3 col-sm-3">
+					  <label class="form-label" for="exampleFormControlInput1">Idiomas</label>
+					  <select class="form-select js-choice Categoria" id="organizerSingle" size="1" name="languages" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">Seleccione...</option>
+							{% for i in languages %}
+								<option value="{{i.pk}}">{{i.name}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="mb-3 col-sm-3">
+					  <label class="form-label" for="exampleFormControlInput1">Nivel de idioma</label>
+					  <select class="form-select js-choice Categoria" id="organizerSingle" size="1" name="languages_level" data-options='{"removeItemButton":true,"placeholder":true}'>
+							<option value="">Seleccione...</option>
+							{% for i in Languages_Levels %}
+								<option value="{{i.pk}}">{{i.name}}</option>
+							{% endfor %}
+						</select>
+					</div>
+	                <div class="col-3">
+	                    <div class="form-check mb-0" style="top:40px;">
+	                      <input class="form-check-input" name="availability_travel" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">Disponibilidad para viajar</label>
+	                    </div>
+                    </div>
+                    <div class="col-3">
+	                    <div class="form-check mb-0" style="top:40px;">
+	                      <input class="form-check-input" name="change_residence" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">Cambiar de residencia</label>
+	                    </div>
+                    </div>
+				</div>
+
+				<div class="row justify-content-center mb-3">
+					<h5 class="text-center">Licencia de conducción</h5>
+				</div>
+
+				<div class="row justify-content-center mb-3">
+					<div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="1" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">A1</label>
+	                    </div>
+                    </div>
+                    <div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="2" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">A2</label>
+	                    </div>
+                    </div>
+                    <div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="3" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">B1</label>
+	                    </div>
+                    </div>
+                    <div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="4" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">B2</label>
+	                    </div>
+                    </div>
+	                <div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="5" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">B3</label>
+	                    </div>
+                    </div>
+                    <div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="6" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">C1</label>
+	                    </div>
+                    </div>
+                    <div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="7" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">C2</label>
+	                    </div>
+                    </div>
+                    <div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="8" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">C3</label>
+	                    </div>
+                    </div>
+                    <div class="col-1">
+	                    <div class="form-check mb-0">
+	                      <input class="form-check-input" name="driving_license" value="9" type="checkbox" id="card-checkbox" />
+	                      <label class="form-check-label mb-0" for="card-checkbox">Sin permiso</label>
+	                    </div>
+                    </div>
+				</div><br>
+
+				<div class="row">
+					<button class="btn btn-primary save_product" type="submit">Guardar Publicación</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}
+{% block script %}
+<script>
+	console.clear()
+	var yearsOfExperience = {
+	    '0': 'Sin experiencia',
+	    '-1': 'Menos de 1 año',
+	    '1': '1 año',
+	    '2': '2 años',
+	    '3': '3 años',
+	    '4': '4 años',
+	    '5': '5 años',
+	    '6': '6 años',
+	    '7': '7 años',
+	    '8': '8 años',
+	    '9': '9 años',
+	    '10': '10 años',
+	    '11': '11 años',
+	    '12': '12 años',
+	    '13': '13 años',
+	    '14': '14 años',
+	    '15': '15 años',
+	    '16': '16 años',
+	    '17': '17 años',
+	    '18': '18 años',
+	    '19': '19 años',
+	    '20': '20 años',
+	    '21': '21 años',
+	    '22': '22 años',
+	    '23': '23 años',
+	    '24': '24 años',
+	    '25': '25 años',
+	    '26': '26 años',
+	    '27': '27 años',
+	    '28': '28 años',
+	    '29': '29 años',
+	    '30': '30 años'
+	};
+
+	var ageOptions = {
+	    '14': '14',
+	    '15': '15',
+	    '16': '16',
+	    '17': '17',
+	    '18': '18',
+	    '19': '19',
+	    '20': '20',
+	    '21': '21',
+	    '22': '22',
+	    '23': '23',
+	    '24': '24',
+	    '25': '25',
+	    '26': '26',
+	    '27': '27',
+	    '28': '28',
+	    '29': '29',
+	    '30': '30',
+	    '31': '31',
+	    '32': '32',
+	    '33': '33',
+	    '34': '34',
+	    '35': '35',
+	    '36': '36',
+	    '37': '37',
+	    '38': '38',
+	    '39': '39',
+	    '40': '40',
+	    '41': '41',
+	    '42': '42',
+	    '43': '43',
+	    '44': '44',
+	    '45': '45',
+	    '46': '46',
+	    '47': '47',
+	    '48': '48',
+	    '49': '49',
+	    '50': '50',
+	    '51': '51',
+	    '52': '52',
+	    '53': '53',
+	    '54': '54',
+	    '55': '55',
+	    '56': '56',
+	    '57': '57',
+	    '58': '58',
+	    '59': '59',
+	    '60': '60',
+	    '61': '61',
+	    '62': '62',
+	    '63': '63',
+	    '64': '64',
+	    '65': '65',
+	    '66': '66',
+	    '67': '67',
+	    '68': '68',
+	    '69': '69',
+	    '70': '70',
+	    '71': '71',
+	    '72': '72',
+	    '73': '73',
+	    '74': '74',
+	    '75': '75',
+	    '76': '76',
+	    '77': '77',
+	    '78': '78',
+	    '79': '79',
+	    '80': '80',
+	    '81': '81',
+	    '82': '82',
+	    '83': '83',
+	    '84': '84',
+	    '85': '85',
+	    '86': '86',
+	    '87': '87',
+	    '88': '88',
+	    '89': '89',
+	    '90': '90',
+	    '91': '91',
+	    '92': '92',
+	    '93': '93',
+	    '94': '94',
+	    '95': '95',
+	    '96': '96',
+	    '97': '97',
+	    '98': '98',
+	    '99': '99'
+	};
+
+
+
+	preselectedValue = '{{data.years_experience|floatformat:0|add:"0"}}';
+
+	preselectedValue_age_start = '{{data.age_start}}';
+
+	preselectedValue_age_end = '{{data.age_end}}';
+
+    for (key in yearsOfExperience) {
+        if (key !== preselectedValue) {
+        	$("#years_experience").append(`
+        		<option value="${key}">
+        			${yearsOfExperience[key]}
+        		</option>
+        	`)
+        }
+    }
+
+    for (keys in ageOptions) {
+        if (key !== preselectedValue_age_start) {
+        	$("#age_start").append(`
+        		<option value="${key}">
+        			${ageOptions[key]}
+        		</option>
+        	`)
+        }
+    }
+
+    for (key in ageOptions) {
+        if (key !== preselectedValue_age_end) {
+        	$("#age_end").append(`
+        		<option value="${key}">
+        			${ageOptions[key]}
+        		</option>
+        	`)
+        }
+    }
+
+
+	$(document).ready(function(){
+		
+
+		$(".Categoria").change(function(){
+			$('#Sub').empty()
+			$.ajax({
+				data:{'pk':$(".Categoria").val()},
+				success: function(data){
+					obj = JSON.parse(data)
+					console.log($('#Sub'))
+					for(var i = 0; i < obj.length; i++){
+						$('#Sub').append(`<option value="${obj[i]['pk']}">${obj[i]['name']}</option>`)
+					}
+				}
+			})
+		})
+	})
+</script>
+{% endblock %}
