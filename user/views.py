@@ -93,3 +93,11 @@ def Create_Studies(request):
 
 def Validation_Email(request):
 	return render(request,'authentication/confirm-mail.html')
+
+
+def verified_company(request,pk,token):
+	if User().Verified_CompanyS(pk,token):
+		return redirect('Login')
+	return redirect('/')
+
+

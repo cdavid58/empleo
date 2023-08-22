@@ -8,10 +8,8 @@ class User:
 	def Create_User(self,data):
 		url = f"{self._url}user/Create_User/"
 		data["type_document"] = 1
-		response = requests.request("POST", url, headers= self.headers, data=json.dumps(data)
-)
+		response = requests.request("POST", url, headers= self.headers, data=json.dumps(data))
 		return json.loads(response.text)
-
 
 	def Login(self,data):
 		url = f"{self._url}user/Get_Data_User/"
@@ -32,7 +30,6 @@ class User:
 		url = f"{self._url}user/Update_Information_Persons/"
 		response = requests.request('PUT', url, headers= self.headers, data=data)
 
-
 	def Create_Work_Experience(self):
 		url = f"{self._url}user/Create_Work_Experiences/"
 		payload = json.dumps({
@@ -51,11 +48,19 @@ class User:
 		response = requests.request("POST", url, headers=headers, data=payload)
 		print(response.text)
 
-
 	def Create_Studies(self,data):
 		url = f"{self._url}user/Create_Work_Experiences/"
 		response = requests.request('POST',url, headers = self.headers, data = json.dumps(data))
 		return json.loads(response.text)
+
+	def Verified_CompanyS(self,pk,token):
+		url = f"{self._url}/company/verified_company_ready/"
+		payload = json.dumps({
+		  "pk_company": pk,
+		  "token": token
+		})
+		response = requests.request("POST", url, headers= self.headers, data=payload)
+		return json.loads(response.text)['result']
 
 
 
